@@ -68,3 +68,7 @@ common/autoinstallers/*/.npmrc
 .heft
 
 **/dist
+
+.firebase/
+.firebaserc
+firebase.json
