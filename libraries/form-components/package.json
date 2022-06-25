@@ -1,0 +1,20 @@
+{
+  "name": "form-components",
+  "version": "1.0.0",
+  "description": "React Components to build a form dynamically ",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rm -rf dist && mkdir dist && NODE_PATH=./src tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.14",
+    "typescript": "^4.7.4"
+  }
+}

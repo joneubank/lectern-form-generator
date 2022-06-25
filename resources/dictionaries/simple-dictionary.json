@@ -1,0 +1,35 @@
+{
+  "schemas": [
+    {
+      "name": "Simple Schema",
+      "description": "Very small, very simple example.",
+      "fields": [
+        {
+          "name": "example_string",
+          "valueType": "string",
+          "description": "String example with no validations"
+        },
+        {
+          "name": "example_number",
+          "valueType": "number",
+          "description": "Number example with no validations"
+        },
+        {
+          "name": "example_integer",
+          "valueType": "integer",
+          "description": "Integer example with no validations"
+        },
+        {
+          "name": "example_boolean",
+          "valueType": "boolean",
+          "description": "Boolean example with no validations"
+        }
+      ]
+    }
+  ],
+  "_id": "123412341234123412341234",
+  "name": "Simplest Dictionary Example",
+  "version": "1.0",
+  "createdAt": "2022-01-01T00:00:00.000Z",
+  "updatedAt": "2022-01-01T00:00:00.000Z"
+}

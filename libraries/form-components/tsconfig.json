@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": ["esnext", "DOM"],
+    "jsx": "react",
+    "module": "commonjs",
+    "strict": true,
+
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    "preserveConstEnums": true,
+    "removeComments": true,
+    "forceConsistentCasingInFileNames": true,
+
+    "outDir": "./dist",
+    "declaration": true,
+    "sourceMap": true
+  },
+  "include": ["src/*"]
+}
