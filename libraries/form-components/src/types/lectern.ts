@@ -11,6 +11,7 @@ export type LecternDictionary = {
   version: string;
   createdAt: string;
   updatedAt: string;
+  schemas: LecternSchema[];
 };
 
 export type LecternSchema = {
