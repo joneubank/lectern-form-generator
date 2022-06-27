@@ -1,4 +1,7 @@
-import { LecternField } from "../../types/lectern";
+import { LecternField, LecternFieldValue } from 'lectern';
 
-type FieldInputComponent = (props: { field: LecternField }) => JSX.Element;
+type FieldInputComponent = (props: {
+  field: LecternField;
+  onUpdate: (value: LecternFieldValue) => void;
+}) => JSX.Element;
 export default FieldInputComponent;

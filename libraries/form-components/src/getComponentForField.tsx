@@ -3,7 +3,7 @@ import BooleanInput from './components/inputs/BooleanInput';
 import SelectInput from './components/inputs/SelectInput';
 import IntegerInput from './components/inputs/IntegerInput';
 import StringInput from './components/inputs/StringInput';
-import { LecternField, LecternFieldTypes } from './types/lectern';
+import { LecternField, LecternFieldTypes } from 'lectern';
 
 function getComponentForField(field: LecternField): FieldInputComponent {
   if (field.restrictions?.codeList) {

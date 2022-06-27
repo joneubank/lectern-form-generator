@@ -1,10 +1,28 @@
 import * as React from 'react';
-import getComponentForField from '../getComponentForField';
-import { LecternField } from '../types/lectern';
+import styled from 'styled-components';
 
-const SchemaFieldInput = (props: { field: LecternField }) => {
+import { LecternField } from 'lectern';
+
+import getComponentForField from '../getComponentForField';
+import FieldError from './FieldError';
+import { LecternFieldValue } from 'lectern';
+
+const InputWrapper = styled.div`
+  margin: 5px;
+`;
+
+const FieldInput = (props: { field: LecternField }) => {
   const InputComponent = getComponentForField(props.field);
-  return <InputComponent field={props.field}></InputComponent>;
+
+  return (
+    <InputWrapper>
+      <InputComponent
+        field={props.field}
+        onUpdate={(value: LecternFieldValue) => alert(`new value: ${value}`)}
+      ></InputComponent>
+      <FieldError message={props.field.description} />
+    </InputWrapper>
+  );
 };
 
-export default SchemaFieldInput;
+export default FieldInput;

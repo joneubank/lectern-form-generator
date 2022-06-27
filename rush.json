@@ -393,6 +393,11 @@
       "packageName": "form-components",
       "projectFolder": "libraries/form-components",
       "shouldPublish": true
+    },
+    {
+      "packageName": "lectern",
+      "projectFolder": "libraries/lectern",
+      "shouldPublish": false
     }
     // {
     //   /**

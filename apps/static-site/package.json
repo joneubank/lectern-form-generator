@@ -1,6 +1,6 @@
 {
   "name": "static-site",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "",
   "source": "src/index.html",
   "browserslist": "> 0.5%, last 2 versions, not dead",
@@ -16,19 +16,21 @@
     "@types/react": "^18.0.14",
     "@types/react-dom": "^18.0.5",
     "@types/react-helmet": "^6.1.5",
-    "dotenv": "~16.0.1",
-    "process": "^0.11.10",
-    "webpack": "~5.73.0",
+    "@types/styled-components": "~5.1.25",
+    "dotenv-webpack": "~7.1.0",
     "html-webpack-plugin": "~5.5.0",
+    "process": "^0.11.10",
     "ts-loader": "~9.3.1",
+    "webpack": "~5.73.0",
     "webpack-cli": "~4.10.0",
-    "webpack-dev-server": "~4.9.2",
-    "dotenv-webpack": "~7.1.0"
+    "webpack-dev-server": "~4.9.2"
   },
   "dependencies": {
+    "form-components": "workspace:*",
+    "lectern": "workspace:*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
-    "form-components": "workspace:*"
+    "styled-components": "~5.3.5"
   }
 }

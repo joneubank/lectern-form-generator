@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { LecternField } from '../../types/lectern';
+import { LecternField } from 'lectern';
 import FieldInputComponent from './FieldInputComponent';
 
 const CodeListInput: FieldInputComponent = (props: { field: LecternField }) => {
@@ -10,11 +10,8 @@ const CodeListInput: FieldInputComponent = (props: { field: LecternField }) => {
   return (
     <>
       <label htmlFor={name}>{name}:</label>
-      <select id={name} name={name}>
-        <option disabled={required ? true : false} selected>
-          {' '}
-          --{' '}
-        </option>
+      <select id={name} name={name} defaultValue={undefined}>
+        <option disabled={required ? true : false}> -- </option>
         {codeList?.map((value) => (
           <option value={value}>{value}</option>
         ))}

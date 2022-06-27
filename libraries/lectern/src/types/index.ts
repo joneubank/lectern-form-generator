@@ -26,21 +26,26 @@ export type LecternField = {
   description: string;
   valueType: LecternFieldTypes;
   meta?: LecternMeta;
-  restrictions?: LecterFieldRestrictions;
+  restrictions?: LecternFieldRestrictions;
 };
 
 export type LecternMetaValue = boolean | number | string;
 export type LecternMeta = Record<string, LecternMetaValue>;
 
-export type LecterFieldRestrictions = {
+export type LecternRangeRestriction = {
+  min?: number;
+  exclusiveMin?: number;
+  max?: number;
+  exclusiveMax?: number;
+};
+
+export type LecternFieldRestrictions = {
   codeList?: number[] | string[];
   required?: boolean;
   regex?: string;
   script?: string[];
-  range?: {
-    min?: number;
-    exclusiveMin?: number;
-    max?: number;
-    exclusiveMax?: number;
-  };
+  range?: LecternRangeRestriction;
 };
+
+// This is separated from MetaValue because there is some expectation of supporting array values in the future
+export type LecternFieldValue = boolean | number | string; // | number[] | string[];

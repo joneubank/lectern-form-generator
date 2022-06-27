@@ -1,6 +1,6 @@
 import * as React from 'react';
 
-import { LecternField } from '../../types/lectern';
+import { LecternField } from 'lectern';
 import FieldInputComponent from './FieldInputComponent';
 
 const IntegerInput: FieldInputComponent = (props: { field: LecternField }) => {
