@@ -41,8 +41,15 @@ A site generation script in this repo will read a schema from a local file or fr
     This should start the webpack dev server hosting the demo site at [http://localhost:3000](http://localhost:3000).
 
 ## Developer Guide
-
 ### RushJS Monorepo
+
+> **!! DO NOT RUN `npm` in this repo !!**
+> 
+> Use `rush update` to install dependencies, or `rush add -p <package name>` to add an npm package to the current project (based on current directory).
+>
+> To run a script defined in a package.json use `rushx <script name>`.
+>
+> If you do run an `npm` command by mistake, you can clean up with `rush purge` followed by `rush update`.
 
 This repository is built and maintained using [RushJS](https://rushjs.io/) monorepo manager from Microsoft.
 
