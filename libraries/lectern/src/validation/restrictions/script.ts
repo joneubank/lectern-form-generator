@@ -33,7 +33,6 @@ function validateScript(
   };
 
   const validationScript = eval(script);
-  console.log(script);
 
   // Run validation script in try block to catch any issues in the schema's function.
   try {
@@ -41,7 +40,6 @@ function validateScript(
     if (isValidationResult(result)) {
       return result;
     } else {
-      console.log(result);
       throw new Error('Validation script returned unexpected response.');
     }
   } catch (e: unknown) {
