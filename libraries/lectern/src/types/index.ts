@@ -21,6 +21,8 @@ export type LecternSchema = {
   meta?: LecternMeta;
 };
 
+export type LecternSchemaRecord = Record<string, LecternFieldValue>;
+
 export type LecternField = {
   name: string;
   description: string;
@@ -48,4 +50,4 @@ export type LecternFieldRestrictions = {
 };
 
 // This is separated from MetaValue because there is some expectation of supporting array values in the future
-export type LecternFieldValue = boolean | number | string; // | number[] | string[];
+export type LecternFieldValue = boolean | number | string | undefined; // | number[] | string[];

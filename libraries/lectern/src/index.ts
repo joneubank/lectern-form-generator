@@ -10,4 +10,5 @@ export {
   LecternSchema,
 } from './types';
 
+export { ValidationResponse } from './validation';
 export { validateField } from './validation';
