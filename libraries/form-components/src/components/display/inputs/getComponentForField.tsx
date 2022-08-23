@@ -1,14 +1,15 @@
-import FieldInputComponent from './components/inputs/FieldInputComponent';
-import BooleanInput from './components/inputs/BooleanInput';
-import SelectInput from './components/inputs/SelectInput';
-import IntegerInput from './components/inputs/IntegerInput';
-import StringInput from './components/inputs/StringInput';
+import FieldInputComponent from './FieldInputComponent';
+import BooleanInput from './BooleanInput';
+import SelectInput from './SelectInput';
+import IntegerInput from './IntegerInput';
+import NumberInput from './NumberInput';
+import StringInput from './StringInput';
 import { LecternField, LecternFieldTypes } from 'lectern';
 
 function getComponentForField(field: LecternField): FieldInputComponent {
   if (field.restrictions?.codeList) {
     // TODO: Define an autocomplete input component
-    // TODO: Make the max lenght for SelectInput configurable.
+    // TODO: Make the max length for SelectInput configurable.
     // if(field.restrictions?.codeList.length > 20) {
     //   return AutocompleteInput;
     // }
@@ -20,7 +21,7 @@ function getComponentForField(field: LecternField): FieldInputComponent {
     case LecternFieldTypes.Integer:
       return IntegerInput;
     case LecternFieldTypes.Number:
-      return StringInput;
+      return NumberInput;
     case LecternFieldTypes.String:
       return StringInput;
   }
