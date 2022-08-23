@@ -2,19 +2,14 @@ import * as React from 'react';
 import { Helmet } from 'react-helmet';
 // import styled from 'styled-components';
 
-import { SchemaInputs } from 'form-components';
-import { LecternSchema } from 'lectern';
+import { DictionaryLayout, DictionarySubmissionProvider } from 'form-components';
+import { LecternDictionary } from 'lectern';
 
 import config from './config';
 
-import dictionary from '../../../resources/dictionaries/simple-dictionary.json';
+import allInputsDictionary from '../../../resources/dictionaries/all-inputs.json';
 
-// const getDictionary = async () => ();
-
-// const StyledForm = styled.form`
-//   input {
-//   }
-// `;
+const dictionary = allInputsDictionary;
 
 const App = () => {
   return (
@@ -23,12 +18,10 @@ const App = () => {
         <title>{config.site.title}</title>
         <meta name="description" content={config.site.description} />
       </Helmet>
-      <pre>
-        <code>{JSON.stringify(dictionary, null, 2)}</code>
-      </pre>
-      <form>
-        {dictionary ? <SchemaInputs schema={dictionary.schemas[0] as LecternSchema} /> : 'Loading dictionary...'}
-      </form>
+
+      <DictionarySubmissionProvider dictionary={dictionary as LecternDictionary}>
+        <DictionaryLayout dictionary={dictionary as LecternDictionary} />
+      </DictionarySubmissionProvider>
     </>
   );
 };

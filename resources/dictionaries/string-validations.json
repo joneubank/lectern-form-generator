@@ -1,0 +1,39 @@
+{
+  "schemas": [
+    {
+      "name": "strings",
+      "description": "String Inputs with Restrictions",
+      "fields": [
+        {
+          "name": "string_with_required",
+          "valueType": "string",
+          "description": "String that must be provided",
+          "restrictions": { "required": true }
+        },
+        {
+          "name": "string_with_regex",
+          "valueType": "string",
+          "description": "String with regex to approximate email formatting",
+          "restrictions": { "regex": "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)+$" }
+        },
+        {
+          "name": "string_with_code_list",
+          "valueType": "string",
+          "description": "String with Code List",
+          "restrictions": { "codeList": ["First", "Second", "Third", "Other"] }
+        },
+        {
+          "name": "string_with_validation_script",
+          "valueType": "string",
+          "description": "String with validation script",
+          "restrictions": { "script": ["(function(){\r\nreturn true;\r\n\r\n\r\n\r\n}())"] }
+        }
+      ]
+    }
+  ],
+  "_id": "123412341234123412341001",
+  "name": "String Validations Dictionary",
+  "version": "1.0",
+  "createdAt": "2022-01-01T00:00:00.000Z",
+  "updatedAt": "2022-01-01T00:00:00.000Z"
+}

@@ -1,0 +1,69 @@
+{
+  "schemas": [
+    {
+      "name": "Basic Inputs",
+      "description": "All input fields without any restrictions",
+      "fields": [
+        {
+          "name": "example_string",
+          "valueType": "string",
+          "description": "String example with no validations"
+        },
+        {
+          "name": "example_number",
+          "valueType": "number",
+          "description": "Number example with no validations"
+        },
+        {
+          "name": "example_integer",
+          "valueType": "integer",
+          "description": "Integer example with no validations"
+        },
+        {
+          "name": "example_boolean",
+          "valueType": "boolean",
+          "description": "Boolean example with no validations"
+        }
+      ]
+    },
+    {
+      "name": "String Restrictions",
+      "description": "String inputs to test each type of restriction",
+      "fields": [
+        {
+          "name": "string_with_required",
+          "valueType": "string",
+          "description": "String that must be provided",
+          "restrictions": { "required": true }
+        },
+        {
+          "name": "string_with_regex",
+          "valueType": "string",
+          "description": "String with regex to approximate email formatting",
+          "restrictions": { "regex": "^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)+$" }
+        },
+        {
+          "name": "string_with_code_list",
+          "valueType": "string",
+          "description": "String with Code List",
+          "restrictions": { "codeList": ["First", "Second", "Third", "Other"] }
+        },
+        {
+          "name": "string_with_script",
+          "valueType": "string",
+          "description": "String with script that checks if this string contains the value from `string_with_required`",
+          "restrictions": {
+            "script": [
+              "(function(inputs){\r\n\tconst {$row, $name, $field} = inputs;\r\n\tlet result = {valid: false, message: \"This field must contain the string value provided in `string_with_required`\"};\r\n\tif($row.string_with_required !== undefined && $field.includes($row.string_with_required)) {result = {valid: true, message: \"OK\"};}\r\n\treturn result;\r\n})"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "_id": "123412341234123412341000",
+  "name": "All Test Schemas",
+  "version": "1.0",
+  "createdAt": "2022-01-01T00:00:00.000Z",
+  "updatedAt": "2022-01-01T00:00:00.000Z"
+}
