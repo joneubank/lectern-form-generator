@@ -18,6 +18,7 @@ export enum RestrictionName {
   Range = 'range',
   RegEx = 'regex',
   Required = 'required',
+  Script = 'script',
   ValueType = 'valueType', // In lectern this isn't listed in restrictions, but must still be validated
 }
 
@@ -37,13 +38,16 @@ export const ValidationFailureReasons: Record<string, (...args: any[]) => Valida
     failureReason(RestrictionName.ValueType, expectedType, `Field value must be of type '${expectedType}'.`),
   range: (range: LecternRangeRestriction) =>
     failureReason(RestrictionName.Range, range, 'Field value must be within the restricted range.'),
-  regex: (regex: string) => failureReason(RestrictionName.RegEx, regex, 'Field value must match regular expression.'),
+  regex: (regex: string) => failureReason(RestrictionName.RegEx, regex, `Field value must match the pattern.`),
   requiredField: () => failureReason(RestrictionName.Required, true, `Field value is required.`),
+  script: (script: string, reason: string) => failureReason(RestrictionName.Script, script, reason),
 };
 
-export const failedValidationResponse = (...failures: ValidationFailure[]) => ({
-  valid: false,
-  failures,
-});
+export const failedValidationResponse = (...failures: ValidationFailure[]) => {
+  return {
+    valid: false,
+    failures,
+  };
+};
 
 export const successfulValidationResponse = () => ({ valid: true });
