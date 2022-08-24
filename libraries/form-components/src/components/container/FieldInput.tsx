@@ -3,7 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { getComponentForField } from '../display/inputs';
-import FieldError from '../display/FieldError';
+import FieldValidation from '../display/FieldValidation';
 import { LecternField, LecternFieldValue, ValidationResponse, LecternSchema } from 'lectern';
 import { useDictionarySubmissionContext } from '../context';
 
@@ -21,14 +21,12 @@ const FieldInput = (props: { schema: LecternSchema; field: LecternField }) => {
       <InputComponent
         field={props.field}
         value={context.userInputs[props.schema.name][props.field.name]?.value}
+        clearValidation={() => context.clearUserInputValidation(props.schema.name, props.field.name)}
         onUpdate={(value: LecternFieldValue) =>
           context.updateUserInput(props.schema.name, props.field.name, value, context.userInputs[props.schema.name])
         }
       ></InputComponent>
-      <FieldError
-        valid={validation?.valid}
-        message={validation && !validation.valid && validation.failures ? validation.failures[0].message : ''}
-      />
+      <FieldValidation validation={validation} />
     </InputWrapper>
   );
 };

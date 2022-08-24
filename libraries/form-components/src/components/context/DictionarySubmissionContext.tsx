@@ -19,8 +19,11 @@ type UserInputs = Record<string, SchemaInputState>;
 interface DictionarySubmissionContextInterface {
   dictionary?: LecternDictionary;
   submittedData: SubmittedData;
-
   userInputs: UserInputs;
+
+  clearUserInputValidation: (schema: string, field: string) => void;
+  resetUserInputs: (schema: string) => void;
+  submitUserInputs: (schema: string) => void;
   updateUserInput: (
     schema: string,
     field: string,
@@ -28,17 +31,17 @@ interface DictionarySubmissionContextInterface {
     userInputs: SchemaInputState,
   ) => ValidationResponse | undefined;
   validateUserInputs: (schema: string) => boolean;
-  submitUserInputs: (schema: string) => void;
-  resetUserInputs: (schema: string) => void;
 }
 
 export const DictionarySubmissionContext = createContext<DictionarySubmissionContextInterface>({
   submittedData: {},
   userInputs: {},
+
+  clearUserInputValidation: () => {},
+  resetUserInputs: () => {},
+  submitUserInputs: () => {},
   updateUserInput: () => undefined,
   validateUserInputs: () => false,
-  submitUserInputs: () => {},
-  resetUserInputs: () => {},
 });
 
 export function useDictionarySubmissionContext() {
@@ -98,6 +101,15 @@ export function DictionarySubmissionProvider(props: {
     }
   };
 
+  const clearUserInputValidation = (schemaName: string, fieldName: string) => {
+    const field = findField(schemaName, fieldName);
+    if (field) {
+      const updatedUserInputs = { ...userInputs };
+      updatedUserInputs[schemaName][fieldName] = { value: updatedUserInputs[schemaName][fieldName]?.value }; // no validation
+      setUserInputs(updatedUserInputs);
+    }
+  };
+
   const validateUserInputs = (schema: string) => {
     const record = userInputs[schema];
     const recordEntries = Object.entries(record);
@@ -127,10 +139,12 @@ export function DictionarySubmissionProvider(props: {
     dictionary: props.dictionary,
     submittedData,
     userInputs,
+
+    clearUserInputValidation,
+    resetUserInputs,
+    submitUserInputs,
     updateUserInput,
     validateUserInputs,
-    submitUserInputs,
-    resetUserInputs,
   };
 
   return (

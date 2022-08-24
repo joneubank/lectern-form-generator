@@ -8,6 +8,7 @@ import { DEFAULT_DEBOUNCE_DELAY } from '.';
 const IntegerInput: FieldInputComponent = (props: {
   field: LecternField;
   onUpdate: (value: number | undefined) => void;
+  clearValidation?: () => void;
   updateDebounce?: number;
 }) => {
   const name = props.field.name;
@@ -23,6 +24,24 @@ const IntegerInput: FieldInputComponent = (props: {
 
   const debouncedEventUpdate = debounce(eventUpdate, props.updateDebounce || DEFAULT_DEBOUNCE_DELAY);
 
+  /**
+   * onChange we want to clear the validation and then run the debounced version of eventUpdate,
+   *  this debounced version prevents validating immediately on every key stroke which can be disconcerting to the typer
+   * @param e input event
+   */
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (props.clearValidation) {
+      props.clearValidation();
+    }
+    debouncedEventUpdate(e);
+  };
+
+  /**
+   * run the eventUpdate immediately and clear any pending debounced executions by invoking the debounced.now
+   * @param e input event
+   */
+  const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => debouncedEventUpdate.now(e);
+
   return (
     <>
       <label htmlFor={name}>{name}:</label>
@@ -33,8 +52,8 @@ const IntegerInput: FieldInputComponent = (props: {
         min={min}
         max={max}
         step={1}
-        onChange={debouncedEventUpdate}
-        onBlur={debouncedEventUpdate.now}
+        onChange={onChange}
+        onBlur={onBlur}
       ></input>
     </>
   );
