@@ -5,35 +5,35 @@ import { LecternField } from 'lectern';
 import FieldInputComponent from './FieldInputComponent';
 import { DEFAULT_DEBOUNCE_DELAY } from '.';
 import debounce from '../../../utils/debounce';
+import { FieldInputState } from '../../../types';
 
 const NumberInput: FieldInputComponent = (props: {
-  value?: LecternFieldValue;
-
+  state: FieldInputState;
   field: LecternField;
-  clearValidation?: () => void;
-  onUpdate: (value: number | string | undefined) => void;
+  onUpdate: (state: FieldInputState) => void;
   updateDebounce?: number;
 }) => {
   const name = props.field.name;
 
-  const value = props.value === undefined ? undefined : `${props.value}`;
+  const propsValue = props.state.value === undefined ? undefined : `${props.state.value}`;
 
   const eventUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
     // The nested ternary is built to consider empty entries as undefined, and to parse any reasonable numeric values as a float
     // while returning NaN for strings with mixed digits and other characters.
     // parseFloat on its own will return a number if the string starts with digits, even if it contains unreasonable characters like letters.
-    const value = e.target.value.trim();
-    return props.onUpdate(
-      [undefined, ''].includes(e.target.value)
-        ? undefined // return undefined for empty strings
-        : value.match(/^([-][ ]*)?[\d]+([.][\d]*)?$/) // regex for numeric only, with optional negative sign and optional decimal places
-        ? parseFloat(value)
-        : e.target.value,
-    );
+    const eventValue = e.target.value.trim();
+    const value = [undefined, ''].includes(eventValue)
+      ? undefined // return undefined for empty strings
+      : eventValue.match(/^([-][ ]*)?[\d]+([.][\d]*)?$/) // regex for numeric only, with optional negative sign and optional decimal places
+      ? parseFloat(eventValue)
+      : e.target.value;
+
+    return props.onUpdate({ value });
   };
 
-  const [debouncedEventUpdate, _setDebounceEvent] = React.useState(() =>
+  const debouncedEventUpdate = React.useCallback(
     debounce(eventUpdate, props.updateDebounce || DEFAULT_DEBOUNCE_DELAY),
+    [props.updateDebounce || DEFAULT_DEBOUNCE_DELAY],
   );
 
   /**
@@ -42,9 +42,9 @@ const NumberInput: FieldInputComponent = (props: {
    * @param e input event
    */
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (props.clearValidation) {
-      props.clearValidation();
-    }
+    // if (props.clearValidation) {
+    //   props.clearValidation();
+    // }
     debouncedEventUpdate(e);
   };
 
@@ -57,7 +57,7 @@ const NumberInput: FieldInputComponent = (props: {
   return (
     <>
       <label htmlFor={name}>{name}:</label>
-      <input type="string" id={name} name={name} defaultValue={value} onChange={onChange} onBlur={onBlur}></input>
+      <input type="string" id={name} name={name} defaultValue={propsValue} onChange={onChange} onBlur={onBlur}></input>
     </>
   );
 };

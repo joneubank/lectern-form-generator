@@ -5,20 +5,20 @@ import { LecternField, LecternFieldValue } from 'lectern';
 import FieldInputComponent from './FieldInputComponent';
 import debounce from '../../../utils/debounce';
 import { DEFAULT_DEBOUNCE_DELAY } from '.';
+import { FieldInputState } from '../../../types';
 
 const StringInput: FieldInputComponent = (props: {
-  value?: LecternFieldValue;
-
+  state: FieldInputState;
   field: LecternField;
-  clearValidation?: () => void;
-  onUpdate: (value: string | undefined) => void;
+  onUpdate: (state: FieldInputState) => void;
   updateDebounce?: number;
 }) => {
   const eventUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    props.onUpdate(e.target.value);
+    props.onUpdate({ value: e.target.value });
   };
-  const [debouncedEventUpdate, _setDebounceEvent] = React.useState(() =>
+  const debouncedEventUpdate = React.useCallback(
     debounce(eventUpdate, props.updateDebounce || DEFAULT_DEBOUNCE_DELAY),
+    [props.updateDebounce || DEFAULT_DEBOUNCE_DELAY],
   );
 
   /**
@@ -27,9 +27,9 @@ const StringInput: FieldInputComponent = (props: {
    * @param e input event
    */
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (props.clearValidation) {
-      props.clearValidation();
-    }
+    // if (props.clearValidation) {
+    //   props.clearValidation();
+    // }
     debouncedEventUpdate(e);
   };
 
@@ -40,7 +40,7 @@ const StringInput: FieldInputComponent = (props: {
   const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => debouncedEventUpdate.now(e);
 
   const name = props.field.name;
-  const value = props.value === undefined ? '' : `${props.value}`;
+  const value = props.state.value === undefined ? '' : `${props.state.value}`;
 
   return (
     <>

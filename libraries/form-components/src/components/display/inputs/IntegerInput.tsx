@@ -4,26 +4,32 @@ import { LecternField } from 'lectern';
 import FieldInputComponent from './FieldInputComponent';
 import debounce from '../../../utils/debounce';
 import { DEFAULT_DEBOUNCE_DELAY } from '.';
+import { FieldInputState } from '../../../types';
 
 const IntegerInput: FieldInputComponent = (props: {
+  state: FieldInputState;
   field: LecternField;
-  onUpdate: (value: number | undefined) => void;
-  clearValidation?: () => void;
+  onUpdate: (state: FieldInputState) => void;
   updateDebounce?: number;
 }) => {
   const name = props.field.name;
+
+  const propsValue = props.state.value === undefined ? undefined : `${props.state.value}`;
 
   const range = props.field.restrictions?.range || {};
   const min = range.exclusiveMin ? range.exclusiveMin + 1 : range.min;
   const max = range.exclusiveMax ? range.exclusiveMax + 1 : range.max;
 
   const eventUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    props.onUpdate(value === undefined || value === '' ? undefined : parseFloat(value));
+    const eventValue = e.target.value;
+    const value = eventValue === undefined || eventValue === '' ? undefined : parseFloat(eventValue);
+
+    props.onUpdate({ value });
   };
 
-  const [debouncedEventUpdate, _setDebounceEvent] = React.useState(() =>
+  const debouncedEventUpdate = React.useCallback(
     debounce(eventUpdate, props.updateDebounce || DEFAULT_DEBOUNCE_DELAY),
+    [props.updateDebounce || DEFAULT_DEBOUNCE_DELAY],
   );
 
   /**
@@ -32,9 +38,9 @@ const IntegerInput: FieldInputComponent = (props: {
    * @param e input event
    */
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (props.clearValidation) {
-      props.clearValidation();
-    }
+    // if (props.clearValidation) {
+    //   props.clearValidation();
+    // }
     debouncedEventUpdate(e);
   };
 
@@ -56,6 +62,7 @@ const IntegerInput: FieldInputComponent = (props: {
         step={1}
         onChange={onChange}
         onBlur={onBlur}
+        defaultValue={propsValue}
       ></input>
     </>
   );

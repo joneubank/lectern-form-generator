@@ -6,6 +6,7 @@ import { SubmittedRecordsTable } from '../display/submittedRecords';
 import { useDictionarySubmissionContext } from '../context';
 import formatDataAsTsv from '../../utils/formatDataAsTsv';
 import downloadFile from '../../utils/downloadFile';
+import { SchemaInputState } from '../../types';
 
 const SchemaLayout = (props: { schema: LecternSchema }) => {
   const context = useDictionarySubmissionContext();
@@ -15,10 +16,8 @@ const SchemaLayout = (props: { schema: LecternSchema }) => {
     setShowSchema(!showSchema);
   }
 
-  const onSubmit = () => {
-    if (context.validateUserInputs(props.schema.name)) {
-      context.submitUserInputs(props.schema.name);
-    }
+  const onSubmit = (userInputs: SchemaInputState) => {
+    context.submitUserInputs(props.schema.name, userInputs);
   };
 
   return (
@@ -40,7 +39,7 @@ const SchemaLayout = (props: { schema: LecternSchema }) => {
         Download TSV
       </button>
       <br />
-      <SchemaForm schema={props.schema} recordId={0} onSubmit={onSubmit}></SchemaForm>
+      <SchemaForm schema={props.schema} onSubmit={onSubmit}></SchemaForm>
       <br />
       <button onClick={toggleSchema}>{showSchema ? 'Hide' : 'Show'} Schema</button>
       <br />

@@ -6,27 +6,22 @@ import { getComponentForField } from '../display/inputs';
 import FieldValidation from '../display/FieldValidation';
 import { LecternField, LecternFieldValue, ValidationResponse, LecternSchema } from 'lectern';
 import { useDictionarySubmissionContext } from '../context';
+import { FieldInputState } from '../../types';
 
 const InputWrapper = styled.div`
   margin: 5px;
 `;
 
-const FieldInput = (props: { schema: LecternSchema; field: LecternField }) => {
-  const context = useDictionarySubmissionContext();
-  const validation = context.userInputs[props.schema.name][props.field.name]?.validation;
+const FieldInput = (props: {
+  field: LecternField;
+  state: FieldInputState;
+  onUpdate: (state: FieldInputState) => void;
+}) => {
   const InputComponent = getComponentForField(props.field);
 
   return (
     <InputWrapper>
-      <InputComponent
-        field={props.field}
-        value={context.userInputs[props.schema.name][props.field.name]?.value}
-        clearValidation={() => context.clearUserInputValidation(props.schema.name, props.field.name)}
-        onUpdate={(value: LecternFieldValue) =>
-          context.updateUserInput(props.schema.name, props.field.name, value, context.userInputs[props.schema.name])
-        }
-      ></InputComponent>
-      <FieldValidation validation={validation} />
+      <InputComponent field={props.field} state={props.state} onUpdate={props.onUpdate}></InputComponent>
     </InputWrapper>
   );
 };

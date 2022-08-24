@@ -1,10 +1,10 @@
 import { LecternField, LecternFieldValue } from 'lectern';
+import { FieldInputState } from '../../../types';
 
 type FieldInputComponent = (props: {
   field: LecternField;
-  value?: LecternFieldValue;
-  clearValidation?: () => void;
-  onUpdate: (value: LecternFieldValue) => void;
+  state: FieldInputState;
+  onUpdate: (state: FieldInputState) => void;
   updateDebounce?: number;
 }) => JSX.Element;
 export default FieldInputComponent;

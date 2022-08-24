@@ -23,7 +23,7 @@ interface DictionarySubmissionContextInterface {
 
   clearUserInputValidation: (schema: string, field: string) => void;
   resetUserInputs: (schema: string) => void;
-  submitUserInputs: (schema: string) => void;
+  submitUserInputs: (schema: string, userInputs: SchemaInputState) => void;
   updateUserInput: (
     schema: string,
     field: string,
@@ -120,9 +120,8 @@ export function DictionarySubmissionProvider(props: {
     return results.every((result) => result?.valid);
   };
 
-  const submitUserInputs = (schema: string) => {
-    const record = userInputs[schema];
-    submittedData[schema] = [...submittedData[schema], convertInputStateToSchemaRecord(record)];
+  const submitUserInputs = (schema: string, userInputs: SchemaInputState) => {
+    submittedData[schema] = [...submittedData[schema], convertInputStateToSchemaRecord(userInputs)];
     setSubmittedData({ ...submittedData });
     resetUserInputs(schema);
   };
