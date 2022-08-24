@@ -22,7 +22,9 @@ const IntegerInput: FieldInputComponent = (props: {
     props.onUpdate(value === undefined || value === '' ? undefined : parseFloat(value));
   };
 
-  const debouncedEventUpdate = debounce(eventUpdate, props.updateDebounce || DEFAULT_DEBOUNCE_DELAY);
+  const [debouncedEventUpdate, _setDebounceEvent] = React.useState(() =>
+    debounce(eventUpdate, props.updateDebounce || DEFAULT_DEBOUNCE_DELAY),
+  );
 
   /**
    * onChange we want to clear the validation and then run the debounced version of eventUpdate,

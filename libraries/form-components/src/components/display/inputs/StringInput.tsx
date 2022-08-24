@@ -14,12 +14,12 @@ const StringInput: FieldInputComponent = (props: {
   onUpdate: (value: string | undefined) => void;
   updateDebounce?: number;
 }) => {
-  const name = props.field.name;
-
   const eventUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
     props.onUpdate(e.target.value);
   };
-  const debouncedEventUpdate = debounce(eventUpdate, props.updateDebounce || DEFAULT_DEBOUNCE_DELAY);
+  const [debouncedEventUpdate, _setDebounceEvent] = React.useState(() =>
+    debounce(eventUpdate, props.updateDebounce || DEFAULT_DEBOUNCE_DELAY),
+  );
 
   /**
    * onChange we want to clear the validation and then run the debounced version of eventUpdate,
@@ -39,6 +39,7 @@ const StringInput: FieldInputComponent = (props: {
    */
   const onBlur = (e: React.ChangeEvent<HTMLInputElement>) => debouncedEventUpdate.now(e);
 
+  const name = props.field.name;
   const value = props.value === undefined ? '' : `${props.value}`;
 
   return (
