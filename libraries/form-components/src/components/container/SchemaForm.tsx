@@ -1,11 +1,12 @@
-import { LecternSchema } from 'lectern';
+import { LecternField, LecternFieldValue, LecternSchema, validateField } from 'lectern';
 import * as React from 'react';
 import { FieldInputState, SchemaInputState } from '../../types';
-import { buildEmptyInputForSchema } from '../../utils/schemaFormUtils';
+import { buildEmptyInputForSchema, convertInputStateToSchemaRecord } from '../../utils/schemaFormUtils';
 import SchemaFieldInput from '../container/FieldInput';
 
 enum UserInputReducerActions {
   UPDATE_FIELD,
+  VALIDATE_ALL,
   RESET,
 }
 
@@ -19,30 +20,56 @@ const SchemaForm = (props: { schema: LecternSchema; onSubmit: (userInputs: Schem
 
   const initialUserInputs: SchemaInputState = buildEmptyInputForSchema(props.schema);
 
-  const userInputReducer = (
+  const _userInputsReducer = (
     previousState: SchemaInputState,
     action:
-      | { type: UserInputReducerActions.UPDATE_FIELD; state: FieldInputState; field: string }
+      | { type: UserInputReducerActions.UPDATE_FIELD; value: LecternFieldValue; field: LecternField }
+      | { type: UserInputReducerActions.VALIDATE_ALL }
       | { type: UserInputReducerActions.RESET },
   ) => {
     switch (action.type) {
       case UserInputReducerActions.RESET:
         return initialUserInputs;
       case UserInputReducerActions.UPDATE_FIELD:
-        return { ...previousState, [action.field]: action.state };
+        const validation = validateField(action.field, action.value, convertInputStateToSchemaRecord(previousState));
+        return { ...previousState, [action.field.name]: { value: action.value, validation } };
+      case UserInputReducerActions.VALIDATE_ALL:
+        const inputsAsRecord = convertInputStateToSchemaRecord(previousState);
+        const validatedState = props.schema.fields.reduce<SchemaInputState>((acc, field) => {
+          const validation = validateField(field, previousState[field.name]?.value, inputsAsRecord);
+          acc[field.name] = { value: previousState[field.name].value, validation };
+          return acc;
+        }, {});
+        return validatedState;
     }
   };
-  const [userInputs, setUserInputs] = React.useReducer(userInputReducer, initialUserInputs);
+  const [userInputs, userInputsReducer] = React.useReducer(_userInputsReducer, initialUserInputs);
 
-  const updateUserInputs = (state: FieldInputState, field: string): void => {
-    setUserInputs({ type: UserInputReducerActions.UPDATE_FIELD, state, field });
+  const updateUserInputs = (value: LecternFieldValue, field: LecternField): void => {
+    userInputsReducer({ type: UserInputReducerActions.UPDATE_FIELD, value, field });
+  };
+  const resetUserInputs = () => {
+    userInputsReducer({ type: UserInputReducerActions.RESET });
+  };
+  const validateUserInputs = () => {
+    userInputsReducer({ type: UserInputReducerActions.VALIDATE_ALL });
+  };
+
+  const allFieldsPassValidation = (): boolean => {
+    const inputsAsRecord = convertInputStateToSchemaRecord(userInputs);
+    return props.schema.fields.every(
+      (field) => validateField(field, userInputs[field.name]?.value, inputsAsRecord).valid,
+    );
   };
 
   const submitData = () => {
-    // check validations?
-    props.onSubmit(userInputs);
-    setUserInputs({ type: UserInputReducerActions.RESET });
-    updateSubmissionCount();
+    if (allFieldsPassValidation()) {
+      props.onSubmit(userInputs);
+      resetUserInputs();
+      updateSubmissionCount();
+    } else {
+      validateUserInputs();
+    }
   };
 
   return (
@@ -50,10 +77,10 @@ const SchemaForm = (props: { schema: LecternSchema; onSubmit: (userInputs: Schem
       {props.schema.fields.map((field, fieldIndex) => {
         return (
           <SchemaFieldInput
-            key={`${submissionCount}${fieldIndex}`}
+            key={`${submissionCount}_${fieldIndex}`}
             field={field}
             state={userInputs[field.name] || {}}
-            onUpdate={(state: FieldInputState) => updateUserInputs(state, field.name)}
+            onUpdate={(value: LecternFieldValue) => updateUserInputs(value, field)}
           />
         );
       })}

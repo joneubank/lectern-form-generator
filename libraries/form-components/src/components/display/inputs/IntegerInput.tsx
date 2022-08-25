@@ -1,15 +1,16 @@
 import * as React from 'react';
 
-import { LecternField } from 'lectern';
+import { LecternField, LecternFieldValue, ValidationResponse } from 'lectern';
 import FieldInputComponent from './FieldInputComponent';
 import debounce from '../../../utils/debounce';
 import { DEFAULT_DEBOUNCE_DELAY } from '.';
-import { FieldInputState } from '../../../types';
+import { FieldInputState, SchemaInputState } from '../../../types';
+import FieldValidation from '../FieldValidation';
 
 const IntegerInput: FieldInputComponent = (props: {
-  state: FieldInputState;
   field: LecternField;
-  onUpdate: (state: FieldInputState) => void;
+  state: FieldInputState;
+  onUpdate: (state: LecternFieldValue) => void;
   updateDebounce?: number;
 }) => {
   const name = props.field.name;
@@ -24,7 +25,7 @@ const IntegerInput: FieldInputComponent = (props: {
     const eventValue = e.target.value;
     const value = eventValue === undefined || eventValue === '' ? undefined : parseFloat(eventValue);
 
-    props.onUpdate({ value });
+    props.onUpdate(value);
   };
 
   const debouncedEventUpdate = React.useCallback(
@@ -63,7 +64,8 @@ const IntegerInput: FieldInputComponent = (props: {
         onChange={onChange}
         onBlur={onBlur}
         defaultValue={propsValue}
-      ></input>
+      />
+      <FieldValidation validation={props.state.validation} />
     </>
   );
 };

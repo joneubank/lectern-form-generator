@@ -1,20 +1,22 @@
 import * as React from 'react';
 
-import { LecternField, LecternFieldValue } from 'lectern';
+import { LecternField, LecternFieldValue, validateField, ValidationResponse } from 'lectern';
 
 import FieldInputComponent from './FieldInputComponent';
 import debounce from '../../../utils/debounce';
 import { DEFAULT_DEBOUNCE_DELAY } from '.';
-import { FieldInputState } from '../../../types';
+import { FieldInputState, SchemaInputState } from '../../../types';
+import FieldValidation from '../FieldValidation';
+import { convertInputStateToSchemaRecord } from '../../../utils/schemaFormUtils';
 
 const StringInput: FieldInputComponent = (props: {
-  state: FieldInputState;
   field: LecternField;
-  onUpdate: (state: FieldInputState) => void;
+  state: FieldInputState;
+  onUpdate: (state: LecternFieldValue) => void;
   updateDebounce?: number;
 }) => {
   const eventUpdate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    props.onUpdate({ value: e.target.value });
+    props.onUpdate(e.target.value);
   };
   const debouncedEventUpdate = React.useCallback(
     debounce(eventUpdate, props.updateDebounce || DEFAULT_DEBOUNCE_DELAY),
@@ -45,7 +47,8 @@ const StringInput: FieldInputComponent = (props: {
   return (
     <>
       <label htmlFor={name}>{name}:</label>
-      <input type="text" id={name} name={name} defaultValue={value} onChange={onChange} onBlur={onBlur}></input>
+      <input type="text" id={name} name={name} defaultValue={value} onChange={onChange} onBlur={onBlur} />
+      <FieldValidation validation={props.state.validation} />
     </>
   );
 };

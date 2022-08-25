@@ -7,6 +7,7 @@ import { useDictionarySubmissionContext } from '../context';
 import formatDataAsTsv from '../../utils/formatDataAsTsv';
 import downloadFile from '../../utils/downloadFile';
 import { SchemaInputState } from '../../types';
+import { convertInputStateToSchemaRecord } from '../../utils/schemaFormUtils';
 
 const SchemaLayout = (props: { schema: LecternSchema }) => {
   const context = useDictionarySubmissionContext();
@@ -17,7 +18,7 @@ const SchemaLayout = (props: { schema: LecternSchema }) => {
   }
 
   const onSubmit = (userInputs: SchemaInputState) => {
-    context.submitUserInputs(props.schema.name, userInputs);
+    context.submitSchemaRecord(props.schema.name, convertInputStateToSchemaRecord(userInputs));
   };
 
   return (
@@ -31,8 +32,7 @@ const SchemaLayout = (props: { schema: LecternSchema }) => {
       <button
         onClick={() => {
           const content = formatDataAsTsv(props.schema, context.submittedData[props.schema.name]);
-          // const date = new Date();
-          // const formattedDate = [date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDay()].join('-');
+          // TODO: custom method should be available to customize the name formatting
           downloadFile(`${props.schema.name}.tsv`, content);
         }}
       >

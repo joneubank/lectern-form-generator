@@ -3,9 +3,7 @@ import * as React from 'react';
 import styled from 'styled-components';
 
 import { getComponentForField } from '../display/inputs';
-import FieldValidation from '../display/FieldValidation';
-import { LecternField, LecternFieldValue, ValidationResponse, LecternSchema } from 'lectern';
-import { useDictionarySubmissionContext } from '../context';
+import { LecternField, LecternFieldValue } from 'lectern';
 import { FieldInputState } from '../../types';
 
 const InputWrapper = styled.div`
@@ -15,7 +13,7 @@ const InputWrapper = styled.div`
 const FieldInput = (props: {
   field: LecternField;
   state: FieldInputState;
-  onUpdate: (state: FieldInputState) => void;
+  onUpdate: (value: LecternFieldValue) => void;
 }) => {
   const InputComponent = getComponentForField(props.field);
 

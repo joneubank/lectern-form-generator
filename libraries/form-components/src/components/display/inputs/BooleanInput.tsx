@@ -1,13 +1,14 @@
 import * as React from 'react';
 
-import { LecternField, LecternFieldValue } from 'lectern';
+import { LecternField, LecternFieldValue, ValidationResponse } from 'lectern';
 import FieldInputComponent from './FieldInputComponent';
-import { FieldInputState } from '../../../types';
+import { FieldInputState, SchemaInputState } from '../../../types';
+import FieldValidation from '../FieldValidation';
 
 const BooleanInput: FieldInputComponent = (props: {
-  state: FieldInputState;
   field: LecternField;
-  onUpdate: (state: FieldInputState) => void;
+  state: FieldInputState;
+  onUpdate: (state: LecternFieldValue) => void;
   updateDebounce?: number;
 }) => {
   const name = props.field.name;
@@ -19,7 +20,7 @@ const BooleanInput: FieldInputComponent = (props: {
     const eventValue = e.target.value;
     const value = eventValue === 'true' ? true : eventValue === 'false' ? false : undefined;
 
-    props.onUpdate({ value });
+    props.onUpdate(value);
   };
   return (
     <>
@@ -29,6 +30,7 @@ const BooleanInput: FieldInputComponent = (props: {
         <option value="false">False</option>
         <option value="true">True</option>
       </select>
+      <FieldValidation validation={props.state.validation} />
     </>
   );
 };
