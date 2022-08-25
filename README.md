@@ -2,6 +2,8 @@
 
 > Prototype project candidate for [overture.bio](https://overture.bio)
 
+> Try out the [Live Demo](https://lectern-form-demo.web.app/)
+
 ## What is Lectern?
 
 [Lectern](https://github.com/overture-stack/lectern) is a schema library service used to store and serve schemas that define structured data - especially TSV files.
