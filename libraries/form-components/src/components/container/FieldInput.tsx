@@ -14,12 +14,18 @@ const FieldInput = (props: {
   field: LecternField;
   state: FieldInputState;
   onUpdate: (value: LecternFieldValue) => void;
+  clearValidation: () => void;
 }) => {
   const InputComponent = getComponentForField(props.field);
 
   return (
     <InputWrapper>
-      <InputComponent field={props.field} state={props.state} onUpdate={props.onUpdate}></InputComponent>
+      <InputComponent
+        field={props.field}
+        state={props.state}
+        onUpdate={props.onUpdate}
+        clearValidation={props.clearValidation}
+      ></InputComponent>
     </InputWrapper>
   );
 };

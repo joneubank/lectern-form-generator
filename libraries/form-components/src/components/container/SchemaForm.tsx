@@ -7,6 +7,7 @@ import SchemaFieldInput from '../container/FieldInput';
 enum UserInputReducerActions {
   UPDATE_FIELD,
   VALIDATE_ALL,
+  CLEAR_VALIDATION,
   RESET,
 }
 
@@ -23,13 +24,14 @@ const SchemaForm = (props: { schema: LecternSchema; onSubmit: (userInputs: Schem
   const _userInputsReducer = (
     previousState: SchemaInputState,
     action:
-      | { type: UserInputReducerActions.UPDATE_FIELD; value: LecternFieldValue; field: LecternField }
+      | { type: UserInputReducerActions.CLEAR_VALIDATION; field: LecternField }
+      | { type: UserInputReducerActions.UPDATE_FIELD; field: LecternField; value: LecternFieldValue }
       | { type: UserInputReducerActions.VALIDATE_ALL }
       | { type: UserInputReducerActions.RESET },
   ) => {
     switch (action.type) {
-      case UserInputReducerActions.RESET:
-        return initialUserInputs;
+      case UserInputReducerActions.CLEAR_VALIDATION:
+        return { ...previousState, [action.field.name]: { value: previousState[action.field.name]?.value } };
       case UserInputReducerActions.UPDATE_FIELD:
         const validation = validateField(action.field, action.value, convertInputStateToSchemaRecord(previousState));
         return { ...previousState, [action.field.name]: { value: action.value, validation } };
@@ -41,12 +43,17 @@ const SchemaForm = (props: { schema: LecternSchema; onSubmit: (userInputs: Schem
           return acc;
         }, {});
         return validatedState;
+      case UserInputReducerActions.RESET:
+        return initialUserInputs;
     }
   };
   const [userInputs, userInputsReducer] = React.useReducer(_userInputsReducer, initialUserInputs);
 
-  const updateUserInputs = (value: LecternFieldValue, field: LecternField): void => {
-    userInputsReducer({ type: UserInputReducerActions.UPDATE_FIELD, value, field });
+  const updateUserInput = (value: LecternFieldValue, field: LecternField): void => {
+    userInputsReducer({ type: UserInputReducerActions.UPDATE_FIELD, field, value });
+  };
+  const clearUserInput = (field: LecternField): void => {
+    userInputsReducer({ type: UserInputReducerActions.CLEAR_VALIDATION, field });
   };
   const resetUserInputs = () => {
     userInputsReducer({ type: UserInputReducerActions.RESET });
@@ -80,7 +87,8 @@ const SchemaForm = (props: { schema: LecternSchema; onSubmit: (userInputs: Schem
             key={`${submissionCount}_${fieldIndex}`}
             field={field}
             state={userInputs[field.name] || {}}
-            onUpdate={(value: LecternFieldValue) => updateUserInputs(value, field)}
+            onUpdate={(value: LecternFieldValue) => updateUserInput(value, field)}
+            clearValidation={() => clearUserInput(field)}
           />
         );
       })}

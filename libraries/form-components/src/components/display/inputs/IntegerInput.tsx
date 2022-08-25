@@ -12,6 +12,7 @@ const IntegerInput: FieldInputComponent = (props: {
   state: FieldInputState;
   onUpdate: (state: LecternFieldValue) => void;
   updateDebounce?: number;
+  clearValidation: () => void;
 }) => {
   const name = props.field.name;
 
@@ -39,9 +40,9 @@ const IntegerInput: FieldInputComponent = (props: {
    * @param e input event
    */
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // if (props.clearValidation) {
-    //   props.clearValidation();
-    // }
+    if (props.clearValidation) {
+      props.clearValidation();
+    }
     debouncedEventUpdate(e);
   };
 
